@@ -23,6 +23,52 @@ resource "aws_security_group" "default" {
   }
 }
 
+/* Security group for the angoss server */
+resource "aws_security_group" "angoss-app" {
+  name = "app-angoss-security-group"
+  description = "Security group for nat instances that allows RDP and VPN traffic from internet. Also allows outbound HTTP[S]"
+  vpc_id = "${aws_vpc.default.id}"
+
+  ingress {
+    from_port = 22
+    to_port   = 22
+    protocol  = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port = 1194
+    to_port   = 1194
+    protocol  = "udp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port = 3389
+    to_port   = 3389
+    protocol  = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags { 
+    Name = "app-angos" 
+  }
+}
+
 /* Security group for the nat server */
 resource "aws_security_group" "nat" {
   name = "nat-angoss-security-group"

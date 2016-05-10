@@ -6,7 +6,7 @@ resource "aws_customer_gateway" "customer_gateway" {
     bgp_asn    	= "${var.customer_gw_asn}"
     ip_address 	= "${var.ipsec_peering_point}" /*"172.0.0.1"*/
     type       	= "ipsec.1"
-    /*tags { Name = "${var.customer_gw_name}"}*/
+    tags { Name = "${var.customer_gw_name}"}
 	lifecycle {  prevent_destroy = true  }
 }
 
@@ -15,7 +15,7 @@ resource "aws_vpn_connection" "main" {
     customer_gateway_id = "${aws_customer_gateway.customer_gateway.id}"
     type = "ipsec.1"
     static_routes_only = true
-    /*tags {  Name = "${var.vpc_name}-${var.customer_gw_name}"  }*/
+    tags {  Name = "${var.vpc_name}-${var.customer_gw_name}"  }
 }
 
 

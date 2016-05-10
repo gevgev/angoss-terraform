@@ -26,11 +26,12 @@ variable "private_subnet_cidr" {
   default     = "10.198.1.0/24"
 }
 
-/*variable "vpc_name"          {}
+/*
 variable "vpc_id"            {}
 variable "private_gw_id"     {}
-variable "customer_gw_name"  {}
 variable "customer_gw_ip"    {}*/
+variable "vpc_name"          { default = "angoss-vpc"}
+variable "customer_gw_name"  { default = "rovi-tulsa"}
 variable "customer_gw_asn"   { default = "60000"  }
 variable "destination_cidrs" { default = "10.0.0.0/8,172.16.0.0/12,192.168.0.0/24"}
 

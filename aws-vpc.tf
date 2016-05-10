@@ -13,8 +13,3 @@ resource "aws_vpc" "default" {
     Name = "angoss-group" 
   }
 }
-
-/* Routing table */
-resource "aws_route_table" "rt-main" {
-    vpc_id = "${aws_vpc.default.id}"
-}

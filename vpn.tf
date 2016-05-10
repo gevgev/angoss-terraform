@@ -3,9 +3,11 @@ resource "aws_vpn_gateway" "vpn_gateway" {
 }
 
 resource "aws_customer_gateway" "customer_gateway" {
-    bgp_asn = 60000
-    ip_address = "${var.ipsec_peering_point}" /*"172.0.0.1"*/
-    type = "ipsec.1"
+    bgp_asn    	= "${var.customer_gw_asn}"
+    ip_address 	= "${var.ipsec_peering_point}" /*"172.0.0.1"*/
+    type       	= "ipsec.1"
+    /*tags { Name = "${var.customer_gw_name}"}*/
+	lifecycle {  prevent_destroy = true  }
 }
 
 resource "aws_vpn_connection" "main" {
@@ -13,72 +15,23 @@ resource "aws_vpn_connection" "main" {
     customer_gateway_id = "${aws_customer_gateway.customer_gateway.id}"
     type = "ipsec.1"
     static_routes_only = true
+    /*tags {  Name = "${var.vpc_name}-${var.customer_gw_name}"  }*/
 }
 
-/* Adding route rules */
-resource "aws_route" "rovi-1" {
-    route_table_id = "${aws_route_table.public.id}"
-    destination_cidr_block = "${var.rovi_subnets.sub1}"
-    gateway_id = "${aws_vpn_gateway.vpn_gateway.id}"
-    /*depends_on = ["aws_route_table.testing"]*/
+
+/* From rovi-fan-vpn */
+resource "aws_vpn_connection_route" "route" {
+  count                  = "${length(compact(split(",", var.destination_cidrs)))}"
+  vpn_connection_id      = "${aws_vpn_connection.main.id}"
+  destination_cidr_block = "${element(compact(split(",", var.destination_cidrs)), count.index)}"
 }
 
-resource "aws_route" "rovi-2" {
-    route_table_id = "${aws_route_table.public.id}"
-    destination_cidr_block = "${var.rovi_subnets.sub2}"
-    gateway_id = "${aws_vpn_gateway.vpn_gateway.id}"
-    /*depends_on = ["aws_route_table.testing"]*/
-}
 
-resource "aws_route" "rovi-3" {
-    route_table_id = "${aws_route_table.public.id}"
-    destination_cidr_block = "${var.rovi_subnets.sub3}"
-    gateway_id = "${aws_vpn_gateway.vpn_gateway.id}"
-    /*depends_on = ["aws_route_table.testing"]*/
+/* Adding route rules to routing table of subnet */
+resource "aws_route" "rovi-routes" {
+	count                  = "${length(compact(split(",", var.destination_cidrs)))}"
+    route_table_id         = "${aws_route_table.public.id}" 
+    destination_cidr_block = "${element(compact(split(",", var.destination_cidrs)), count.index)}"
+    gateway_id             = "${aws_vpn_gateway.vpn_gateway.id}"
+    depends_on             = ["aws_route_table.public"]
 }
-
-/*
-resource "aws_route_table" "rovi-1" {
-  vpc_id = "${aws_vpc.default.id}"
-  route {
-    cidr_block = "${var.rovi_subnets.sub1}"
-    gateway_id = "${aws_vpn_gateway.vpn_gateway.id}"
-  }
-}
-
-/* Associate the routing table to public subnet *
-resource "aws_route_table_association" "public" {
-  subnet_id = "${aws_subnet.public.id}"
-  route_table_id = "${aws_route_table.rovi-1.id}"
-}
-*
-
-resource "aws_route_table" "rovi-2" {
-  vpc_id = "${aws_vpc.default.id}"
-  route {
-    cidr_block = "${var.rovi_subnets.sub2}"
-    gateway_id = "${aws_vpn_gateway.vpn_gateway.id}"
-  }
-}
-
-/* Associate the routing table to public subnet *
-resource "aws_route_table_association" "public" {
-  subnet_id = "${aws_subnet.public.id}"
-  route_table_id = "${aws_route_table.rovi-2.id}"
-}
-*
-
-resource "aws_route_table" "rovi-3" {
-  vpc_id = "${aws_vpc.default.id}"
-  route {
-    cidr_block = "${var.rovi_subnets.sub3}"
-    gateway_id = "${aws_vpn_gateway.vpn_gateway.id}"
-  }
-}
-
-/* Associate the routing table to public subnet *
-resource "aws_route_table_association" "public" {
-  subnet_id = "${aws_subnet.public.id}"
-  route_table_id = "${aws_route_table.rovi-3.id}"
-}
-*/

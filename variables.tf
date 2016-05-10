@@ -34,6 +34,7 @@ variable "amis" {
     us-west-2 = "ami-9abea4fb" 
     us-east-1 = "ami-a6b8e7ce"
   }
+}
 
 /* Windows Server 2008 R2 amis by region */
 variable "amis-win" {
@@ -41,5 +42,4 @@ variable "amis-win" {
   default = {
     us-west-2 = "ami-b3d92ed3" 
   }
-
 }

@@ -69,7 +69,7 @@ resource "aws_security_group" "angoss-app" {
   }
 }
 
-/* Security group for the nat server */
+/* Security group for the nat server *
 resource "aws_security_group" "nat" {
   name = "nat-angoss-security-group"
   description = "Security group for nat instances that allows SSH/RDP and VPN traffic from internet. Also allows outbound HTTP[S]"
@@ -114,6 +114,7 @@ resource "aws_security_group" "nat" {
     Name = "nat-angos" 
   }
 }
+*/
 
 /* Security group for the web */
 resource "aws_security_group" "web" {

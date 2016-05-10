@@ -26,6 +26,20 @@ variable "private_subnet_cidr" {
   default     = "10.198.1.0/24"
 }
 
+variable "rovi_subnets" {
+  description = "Rovi end CIDR blocks"
+  default = {
+    sub1 = "10.0.0.0/8"
+    sub2 = "172.16.0.0/12"
+    sub3 = "192.168.0.0/24"
+  }
+}
+
+variable "ipsec_peering_point" {
+  description = "Rovi IPSec peering point"
+  default = "144.198.191.20"
+}
+
 /* Ubuntu 14.04 amis by region */
 variable "amis" {
   description = "Base AMI to launch the instances with"

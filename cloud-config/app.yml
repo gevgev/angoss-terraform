@@ -1,0 +1,14 @@
+#cloud-config
+# Cloud config for application servers 
+
+runcmd:
+  # Install docker
+  - sudo apt-gey update
+  - sudo apt-get -y install lxc wget bsdtar curl
+  - sudo apt-get -y install linux-image-extra-$(uname -r)
+  - sudo modprobe aufs
+  - curl -sSL https://get.docker.com/ | sh
+  - sudo usermod -aG docker ubuntu  
+  #- curl -sSL https://get.docker.com/ | sudo sh
+  # Run nginx
+  - docker run -d -p 80:80 nginx

@@ -19,7 +19,7 @@ resource "aws_vpn_connection" "main" {
 }
 
 
-/* From rovi-fan-vpn */
+/* Copied From rovi-fan-vpn - use of count */
 resource "aws_vpn_connection_route" "route" {
   count                  = "${length(compact(split(",", var.destination_cidrs)))}"
   vpn_connection_id      = "${aws_vpn_connection.main.id}"

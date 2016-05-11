@@ -12,4 +12,5 @@ resource "aws_vpc" "default" {
   tags { 
     Name = "angoss-vpc" 
   }
+  lifecycle {  prevent_destroy = true  }
 }

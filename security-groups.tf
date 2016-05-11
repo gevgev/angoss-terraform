@@ -36,13 +36,6 @@ resource "aws_security_group" "angoss-app" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    from_port = "0"
-    to_port   = "0"
-    protocol  = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   egress {
     from_port = 80
     to_port   = 80
@@ -61,13 +54,6 @@ resource "aws_security_group" "angoss-app" {
     from_port = 1433
     to_port   = 1433
     protocol  = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port = "0"
-    to_port   = "0"
-    protocol  = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 

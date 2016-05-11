@@ -26,7 +26,7 @@ resource "aws_security_group" "default" {
 /* Security group for the angoss server */
 resource "aws_security_group" "angoss-app" {
   name = "app-angoss-security-group"
-  description = "Security group for nat instances that allows RDP traffic from internet. Also allows outbound HTTP[S]"
+  description = "Security group for nat instances that allows RDP traffic from internet. Also allows outbound HTTP[S] and MS SQL"
   vpc_id = "${aws_vpc.default.id}"
 
   ingress {

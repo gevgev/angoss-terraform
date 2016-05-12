@@ -1,6 +1,6 @@
 resource "aws_vpn_gateway" "vpn_gateway" {
     vpc_id = "${aws_vpc.default.id}"
-	lifecycle {  prevent_destroy = true  }
+	/*lifecycle {  prevent_destroy = true  }*/
 }
 
 resource "aws_customer_gateway" "customer_gateway" {
@@ -8,7 +8,7 @@ resource "aws_customer_gateway" "customer_gateway" {
     ip_address 	= "${var.ipsec_peering_point}" /*"172.0.0.1"*/
     type       	= "ipsec.1"
     tags { Name = "${var.customer_gw_name}"}
-	lifecycle {  prevent_destroy = true  }
+	/*lifecycle {  prevent_destroy = true  }*/
 }
 
 resource "aws_vpn_connection" "main" {
@@ -26,7 +26,7 @@ resource "aws_vpn_connection_route" "route" {
   count                  = "${length(compact(split(",", var.destination_cidrs)))}"
   vpn_connection_id      = "${aws_vpn_connection.main.id}"
   destination_cidr_block = "${element(compact(split(",", var.destination_cidrs)), count.index)}"
-  lifecycle {  prevent_destroy = true  }
+  /*lifecycle {  prevent_destroy = true  }*/
 }
 
 

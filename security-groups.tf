@@ -26,14 +26,14 @@ resource "aws_security_group" "default" {
 /* Security group for the angoss server */
 resource "aws_security_group" "angoss-app" {
   name = "app-angoss-security-group"
-  description = "Security group for nat instances that allows RDP traffic from internet. Also allows outbound HTTP[S] and MS SQL"
+  description = "Security group for outbound HTTP[S]"
   vpc_id = "${aws_vpc.default.id}"
 
   ingress {
-    from_port = 3389
-    to_port   = 3389
-    protocol  = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port     = 3389
+    to_port       = 3389
+    protocol      = "tcp"
+    cidr_blocks   = [ "${values(var.rdp_access_cidrs)}" ]
   }
 
   egress {
@@ -51,16 +51,36 @@ resource "aws_security_group" "angoss-app" {
   }
 
   egress {
-    from_port = 1433
-    to_port   = 1433
-    protocol  = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+   from_port     = 1433
+   to_port       = 1433
+   protocol      = "tcp"
+   cidr_blocks   = [ "172.16.77.22/32", "172.16.77.30/32" ]
   }
 
   tags { 
     Name = "app-angos" 
   }
 }
+
+/* using security rules forces the sg recreate
+resource "aws_security_group_rule" "default-rdp-in" {
+   type          = "ingress"
+   from_port     = 3389
+   to_port       = 3389
+   protocol      = "tcp"
+   cidr_blocks   = [ "${values(var.rdp_access_cidrs)}" ]
+   security_group_id = "${aws_security_group.angoss-app.id}"
+}
+
+resource "aws_security_group_rule" "default-ms-sql-out" {
+   type          = "egress"
+   from_port     = 1433
+   to_port       = 1433
+   protocol      = "tcp"
+   cidr_blocks   = [ "172.16.77.22/32", "172.16.77.30/32" ]
+   security_group_id = "${aws_security_group.angoss-app.id}"
+}
+*/
 
 /* Security group for the nat server *
 resource "aws_security_group" "nat" {

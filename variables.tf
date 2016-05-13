@@ -57,3 +57,15 @@ variable "amis-win" {
     us-west-2 = "ami-b3d92ed3" 
   }
 }
+
+/* */
+variable "rdp_access_cidrs" {
+  default = {
+    san-carlos-office = "144.198.19.10/32"
+    tulsa-dc          = "144.198.191.17/32"
+    burbank-office    = "144.198.182.10/32"
+    /*burbank-office2   = "144.198.191.17/32" duplicate value with tulsa-dc, causing terraform error" */
+    bangalore-office  = "182.74.246.98/32"
+    gevgev-home       = "97.94.186.32/32"
+  }
+}

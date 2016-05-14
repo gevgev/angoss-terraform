@@ -58,6 +58,14 @@ variable "amis-win" {
   }
 }
 
+/* Windows Server 2008 R2 with MS SQL amis by region */
+variable "amis-win-sql" {
+  description = "Base AMI to launch the instances with"
+  default = {
+    us-west-2 = "ami-1030c770" 
+  }
+}
+
 /* */
 variable "rdp_access_cidrs" {
   default = {

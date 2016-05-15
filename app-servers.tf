@@ -1,6 +1,6 @@
 /* App servers */
 resource "aws_instance" "app" {
-  count = 2
+  count = 0
   ami = "${lookup(var.amis-win, var.region)}"
   instance_type = "t2.micro"
   subnet_id = "${aws_subnet.public.id}"

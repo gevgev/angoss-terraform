@@ -71,6 +71,13 @@ resource "aws_security_group" "angoss-app" {
    cidr_blocks   = [ "172.16.77.22/32", "172.16.77.30/32" ]
   }
 
+  egress {
+    from_port   = 3389
+    to_port     = 3389
+    protocol    = "tcp"
+    cidr_blocks = ["10.198.0.0/16"]
+  }
+
   tags { 
     Name = "app-angos" 
   }
@@ -162,6 +169,13 @@ resource "aws_security_group" "private" {
     to_port       = 3389
     protocol      = "tcp"
     cidr_blocks   = [ "${values(var.rdp_access_cidrs)}" ]
+  }
+
+  ingress {
+    from_port     = 3389
+    to_port       = 3389
+    protocol      = "tcp"
+    cidr_blocks   = ["10.198.0.0/16"]
   }
 
   ingress {

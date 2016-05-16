@@ -49,6 +49,7 @@ resource "aws_security_group" "angoss-app" {
     protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
   egress {
     from_port = 80
     to_port   = 80
@@ -95,7 +96,7 @@ resource "aws_security_group_rule" "default-ms-sql-out" {
 }
 */
 
-/* Security group for the nat server *
+/* Security group for the nat server */
 resource "aws_security_group" "nat" {
   name = "nat-angoss-security-group"
   description = "Security group for nat instances that allows SSH/RDP and VPN traffic from internet. Also allows outbound HTTP[S]"
@@ -116,9 +117,16 @@ resource "aws_security_group" "nat" {
   }
 
   ingress {
-    from_port = 3389
-    to_port   = 3389
-    protocol  = "tcp"
+    from_port  = -1
+    to_port    = -1
+    protocol   = "icmp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
@@ -139,23 +147,51 @@ resource "aws_security_group" "nat" {
   tags { 
     Name = "nat-angos" 
   }
-}
-*/
+  lifecycle {  prevent_destroy = true  }
 
-/* Security group for the web *
-resource "aws_security_group" "web" {
-  name = "web-angoss-web-security-group"
+}
+
+/* Security group for the web */
+resource "aws_security_group" "private" {
+  name = "angoss-private-security-group"
   description = "Security group for web that allows web traffic from internet"
   vpc_id = "${aws_vpc.default.id}"
 
   ingress {
+    from_port     = 3389
+    to_port       = 3389
+    protocol      = "tcp"
+    cidr_blocks   = [ "${values(var.rdp_access_cidrs)}" ]
+  }
+
+  ingress {
+    from_port  = -1
+    to_port    = -1
+    protocol   = "icmp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+
+  egress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["10.0.0.0/8"]
+  }
+
+  egress {
+   from_port     = 1433
+   to_port       = 1433
+   protocol      = "tcp"
+   cidr_blocks   = [ "172.16.77.22/32", "172.16.77.30/32" ]
+  }
+  egress {
     from_port = 80
     to_port   = 80
     protocol  = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
+  egress {
     from_port = 443
     to_port   = 443
     protocol  = "tcp"
@@ -163,8 +199,6 @@ resource "aws_security_group" "web" {
   }
 
   tags { 
-    Name = "web-angoss" 
+    Name = "angoss-private" 
   }
-}
-
-*/
+} 

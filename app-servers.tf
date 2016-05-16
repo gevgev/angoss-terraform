@@ -42,21 +42,21 @@ resource "aws_volume_attachment" "ebs_att" {
   instance_id = "${aws_instance.app-server.id}"
 }
 
-/* App servers *
-resource "aws_instance" "app" {
-  count = 2
-  ami = "${lookup(var.amis, var.region)}"
+/* App servers */
+resource "aws_instance" "app-p" {
+  count = 1
+  ami = "${lookup(var.amis-win, var.region)}"
   instance_type = "t2.micro"
   subnet_id = "${aws_subnet.private.id}"
-  security_groups = ["${aws_security_group.default.id}"]
+  vpc_security_group_ids = ["${aws_security_group.private.id}"]
   key_name = "${aws_key_pair.deployer.key_name}"
   source_dest_check = false
-  user_data = "${file(\"cloud-config/app.yml\")}"
+  /*user_data = "${file(\"cloud-config/app.yml\")}"*/
   tags = { 
-    Name = "airpair-example-app-${count.index}"
+    Name = "angoss-app-p-${count.index}"
   }
 }
-*/
+
 
 /* Load balancer *
 resource "aws_elb" "app" {

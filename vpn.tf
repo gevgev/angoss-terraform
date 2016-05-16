@@ -26,15 +26,25 @@ resource "aws_vpn_connection_route" "route" {
   count                  = "${length(compact(split(",", var.destination_cidrs)))}"
   vpn_connection_id      = "${aws_vpn_connection.main.id}"
   destination_cidr_block = "${element(compact(split(",", var.destination_cidrs)), count.index)}"
-  lifecycle {  prevent_destroy = true  }
+  /*lifecycle {  prevent_destroy = true  }*/
 }
 
 
-/* Adding route rules to routing table of subnet */
-resource "aws_route" "rovi-routes" {
+/* Adding route rules to public routing table of subnet */
+resource "aws_route" "rovi-routes-public" {
 	count                  = "${length(compact(split(",", var.destination_cidrs)))}"
     route_table_id         = "${aws_route_table.public.id}" 
     destination_cidr_block = "${element(compact(split(",", var.destination_cidrs)), count.index)}"
     gateway_id             = "${aws_vpn_gateway.vpn_gateway.id}"
     depends_on             = ["aws_route_table.public"]
+    /*lifecycle {  ignore_changes = [true] }*/
+}
+
+/* Adding route rules to private routing table of subnet */
+resource "aws_route" "rovi-routes-private" {
+	count                  = "${length(compact(split(",", var.destination_cidrs)))}"
+    route_table_id         = "${aws_route_table.private.id}" 
+    destination_cidr_block = "${element(compact(split(",", var.destination_cidrs)), count.index)}"
+    gateway_id             = "${aws_vpn_gateway.vpn_gateway.id}"
+    depends_on             = ["aws_route_table.private"]
 }

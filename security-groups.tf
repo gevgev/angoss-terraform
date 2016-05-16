@@ -37,6 +37,13 @@ resource "aws_security_group" "angoss-app" {
   }
 
   ingress {
+    from_port     = 3389
+    to_port       = 3389
+    protocol      = "tcp"
+    cidr_blocks   = ["10.0.0.0/8"]
+  }
+
+  ingress {
     from_port  = -1
     to_port    = -1
     protocol   = "icmp"
@@ -190,6 +197,13 @@ resource "aws_security_group" "private" {
     to_port       = 3389
     protocol      = "tcp"
     cidr_blocks   = ["10.198.0.0/16"]
+  }
+
+  ingress {
+    from_port     = 3389
+    to_port       = 3389
+    protocol      = "tcp"
+    cidr_blocks   = ["10.0.0.0/8"]
   }
 
   ingress {

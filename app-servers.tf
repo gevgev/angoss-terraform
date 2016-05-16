@@ -44,7 +44,7 @@ resource "aws_volume_attachment" "ebs_att" {
 
 /* App servers */
 resource "aws_instance" "app-p" {
-  count = 1
+  count = 0
   ami = "${lookup(var.amis-win, var.region)}"
   instance_type = "t2.micro"
   subnet_id = "${aws_subnet.private.id}"

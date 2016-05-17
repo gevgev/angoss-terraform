@@ -13,7 +13,7 @@ resource "aws_instance" "app" {
 }
 
 resource "aws_instance" "app-server" {
-  count = 1
+  count = 0
   ami = "${lookup(var.amis-win-sql, var.region)}"
   instance_type = "m4.xlarge"
   subnet_id = "${aws_subnet.public.id}"
@@ -26,7 +26,7 @@ resource "aws_instance" "app-server" {
 }
 
 resource "aws_ebs_volume" "app-server-volume" {
-    count = 1
+    count = 0
     /* availability_zone = "${var.region}" */
     availability_zone = "us-west-2a"
     size = 1024
@@ -36,7 +36,7 @@ resource "aws_ebs_volume" "app-server-volume" {
 }
 
 resource "aws_volume_attachment" "ebs_att" {
-  count = 1
+  count = 0
   device_name = "xvdb"
   volume_id = "${aws_ebs_volume.app-server-volume.id}"
   instance_id = "${aws_instance.app-server.id}"

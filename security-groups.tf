@@ -186,6 +186,27 @@ resource "aws_security_group" "private" {
   vpc_id = "${aws_vpc.default.id}"
 
   ingress {
+    from_port     = 22
+    to_port       = 22
+    protocol      = "tcp"
+    cidr_blocks   = ["${values(var.ssh_access_cidrs)}"]
+  }
+
+  ingress {
+    from_port     = 22
+    to_port       = 22
+    protocol      = "tcp"
+    cidr_blocks   = ["10.198.0.0/16"]
+  }
+
+  ingress {
+    from_port     = 22
+    to_port       = 22
+    protocol      = "tcp"
+    cidr_blocks   = ["10.0.0.0/8"]
+  }
+
+  ingress {
     from_port     = 3389
     to_port       = 3389
     protocol      = "tcp"
@@ -226,6 +247,7 @@ resource "aws_security_group" "private" {
    protocol      = "tcp"
    cidr_blocks   = [ "172.16.77.22/32", "172.16.77.30/32" ]
   }
+  
   egress {
     from_port = 80
     to_port   = 80

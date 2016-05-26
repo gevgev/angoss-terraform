@@ -18,6 +18,14 @@ output "vpn_connection_id" {
   value = "${aws_vpn_connection.main.id}"
 }
 
+output "app-daas.0.ip" {
+  value = "${aws_instance.app-daas.0.private_ip}"
+}
+
+output "app-daas.1.ip" {
+  value = "${aws_instance.app-daas.1.private_ip}"
+}
+
 /*
 output "nat.ip" {
   value = "${aws_instance.nat.public_ip}"

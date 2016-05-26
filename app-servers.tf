@@ -42,7 +42,27 @@ resource "aws_volume_attachment" "ebs_att" {
   instance_id = "${aws_instance.app-server.id}"
 }
 
+/* -------- DaaS --------- */
+
 /* App servers */
+resource "aws_instance" "app-daas" {
+  count = 0
+  ami = "${lookup(var.amis, var.region)}"
+  instance_type = "t2.micro"
+  subnet_id = "${aws_subnet.private-daas.id}"
+  vpc_security_group_ids = ["${aws_security_group.private.id}"]
+  key_name = "${aws_key_pair.deployer-daas.key_name}"
+  source_dest_check = false
+  /* the user_data installs Docker
+  user_data = "${file(\"cloud-config/app.yml\")}"
+  */
+  tags = { 
+    Name = "daas-app-${count.index}"
+  }
+}
+
+
+/* App servers *
 resource "aws_instance" "app-p" {
   count = 0
   ami = "${lookup(var.amis-win, var.region)}"
@@ -51,11 +71,12 @@ resource "aws_instance" "app-p" {
   vpc_security_group_ids = ["${aws_security_group.private.id}"]
   key_name = "${aws_key_pair.deployer.key_name}"
   source_dest_check = false
-  /*user_data = "${file(\"cloud-config/app.yml\")}"*/
+  user_data = "${file(\"cloud-config/app.yml\")}"
   tags = { 
     Name = "angoss-app-p-${count.index}"
   }
 }
+*/
 
 
 /* Load balancer *

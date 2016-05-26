@@ -26,6 +26,11 @@ variable "private_subnet_cidr" {
   default     = "10.198.1.0/24"
 }
 
+variable "private_subnet_cidr_daas" {
+  description = "CIDR for private subnet"
+  default     = "10.198.16.0/24"
+}
+
 /*
 variable "vpc_id"            {}
 variable "private_gw_id"     {}

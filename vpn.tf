@@ -41,6 +41,7 @@ resource "aws_route" "rovi-routes-public" {
 }
 
 /* Adding route rules to private routing table of subnet */
+/* both private and private-daas are associated with this route */
 resource "aws_route" "rovi-routes-private" {
 	count                  = "${length(compact(split(",", var.destination_cidrs)))}"
     route_table_id         = "${aws_route_table.private.id}" 

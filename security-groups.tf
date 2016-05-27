@@ -179,7 +179,7 @@ resource "aws_security_group" "nat" {
 
 }
 
-/* Security group for the web */
+/* Security group for both private subnets */
 resource "aws_security_group" "private" {
   name = "angoss-private-security-group"
   description = "Security group for web that allows web traffic from internet"
@@ -232,6 +232,30 @@ resource "aws_security_group" "private" {
     to_port    = -1
     protocol   = "icmp"
     cidr_blocks = ["10.0.0.0/8"]
+  }
+
+  /* numerx requested */
+  ingress {
+    from_port   = 8000
+    to_port     = 8000
+    protocol    = "tcp"
+    cidr_blocks = ["${values(var.rovi_access_cidrs)}"]
+  }
+
+  /* numerx requested */
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["${values(var.rovi_access_cidrs)}"]
+  }
+
+  /* numerx requested */
+  ingress {
+    from_port   = 8047
+    to_port     = 8047
+    protocol    = "tcp"
+    cidr_blocks = ["${values(var.rovi_access_cidrs)}"]
   }
 
   egress {

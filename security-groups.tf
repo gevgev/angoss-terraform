@@ -239,7 +239,7 @@ resource "aws_security_group" "private" {
     from_port   = 8000
     to_port     = 8000
     protocol    = "tcp"
-    cidr_blocks = ["${values(var.rovi_access_cidrs)}"]
+    cidr_blocks = ["${values(var.rovi_numerx_access_cidr)}"]
   }
 
   /* numerx requested */
@@ -247,7 +247,7 @@ resource "aws_security_group" "private" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["${values(var.rovi_access_cidrs)}"]
+    cidr_blocks = ["${values(var.rovi_numerx_access_cidr)}"]
   }
 
   /* numerx requested */
@@ -255,7 +255,7 @@ resource "aws_security_group" "private" {
     from_port   = 8047
     to_port     = 8047
     protocol    = "tcp"
-    cidr_blocks = ["${values(var.rovi_access_cidrs)}"]
+    cidr_blocks = ["${values(var.rovi_numerx_access_cidr)}"]
   }
 
   egress {

@@ -104,3 +104,13 @@ variable "rovi_access_cidrs" {
     gevgev-home       = "97.94.186.32/32"
   }
 }
+
+variable "rovi_numerx_access_cidr" {
+  default = {
+    rovi-internal-01 = "10.0.0.0/8"
+    rovi-internal-02 = "172.16.0.0/12"
+    aws-sub-01 = "192.168.0.0/24"
+    aws-sub-02 = "192.168.16.0/24"
+  }
+
+}

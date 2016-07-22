@@ -3,3 +3,4 @@ terraform.tfstate
 terraform.tfstate.backup
 ssh/insecure-deployer
 ssh/insecure-deployer.pub
+ssh/
